@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broodje Bert - Fresh Sandwiches by the Canal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FFD23F 100%);
+            overflow-x: hidden;
+            color: #2C1810;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,107,53,0.95) 0%, rgba(247,147,30,0.9) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .logo-container {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .sandwich-float {
+            font-size: 120px;
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+        }
+
+        h1 {
+            font-size: 90px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 4px 4px 0 rgba(44,24,16,0.3);
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .tagline {
+            font-size: 28px;
+            color: #FFF8E1;
+            font-weight: 300;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 20px 60px;
+            background: white;
+            color: #FF6B35;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,107,53,0.1);
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        }
+
+        .features {
+            background: white;
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: white;
+            clip-path: polygon(0 50%, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 60px;
+            font-weight: 900;
+            color: #FF6B35;
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFE5B4 100%);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(255,107,53,0.3);
+        }
+
+        .feature-icon {
+            font-size: 70px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2C1810;
+            margin-bottom: 15px;
+        }
+
+        .feature-desc {
+            font-size: 18px;
+            color: #5D4037;
+            line-height: 1.6;
+        }
+
+        .gallery {
+            background: linear-gradient(135deg, #FFD23F 0%, #F7931E 100%);
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #FF8A65 0%, #FFB74D 100%);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .gallery-item:hover::after {
+            transform: translateX(100%);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .location {
+            background: white;
+            padding: 100px 20px;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .map-placeholder {
+            background: linear-gradient(135deg, #FFE5B4 0%, #FFD23F 100%);
+            height: 500px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .location-info h3 {
+            font-size: 40px;
+            color: #FF6B35;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 20px;
+            color: #2C1810;
+        }
+
+        .info-icon {
+            font-size: 35px;
+            margin-right: 20px;
+            width: 50px;
+        }
+
+        footer {
+            background: #2C1810;
+            color: #FFE5B4;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            font-size: 40px;
+        }
+
+        .social-links a {
+            color: #FFD23F;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.2);
+            color: #FF6B35;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 50px; }
+            .tagline { font-size: 20px; }
+            .section-title { font-size: 40px; }
+            .location-content { grid-template-columns: 1fr; }
+            .sandwich-float { font-size: 80px; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: float 2s ease-in-out infinite;
+            font-size: 40px;
+            color: white;
+            z-index: 3;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo-container">
+                <div class="sandwich-float">🥪</div>
+            </div>
+            <h1>BROODJE BERT</h1>
+            <p class="tagline">Amsterdam's Most Epic Sandwiches Since Day One</p>
+            <a href="#features" class="cta-button">Discover Our Story</a>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Why We're Legendary</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🌊</span>
+                    <h3 class="feature-title">Canal-Side Vibes</h3>
+                    <p class="feature-desc">Eat your sandwich with a view of the iconic Singel canal. Limited indoor seats, but our outdoor tables are where the magic happens.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🥖</span>
+                    <h3 class="feature-title">Massive Portions</h3>
+                    <p class="feature-desc">Our sandwiches aren't just big—they're ENORMOUS. Fresh bread, premium ingredients, piled high with Mediterranean love.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">💰</span>
+                    <h3 class="feature-title">Unbeatable Value</h3>
+                    <p class="feature-desc">Quality ingredients at honest prices in the heart of Amsterdam. Our guests say it's the best value in the city center.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">👨‍🍳</span>
+                    <h3 class="feature-title">Family Passion</h3>
+                    <p class="feature-desc">Run by a hardworking family team that treats every sandwich like a masterpiece. Friendly smiles included free.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🌿</span>
+                    <h3 class="feature-title">Fresh Daily</h3>
+                    <p class="feature-desc">Everything made on the spot with fresh herbs, crisp veggies, and ingredients we're proud of. Taste the difference.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">☕</span>
+                    <h3 class="feature-title">Coffee & Juice</h3>
+                    <p class="feature-desc">Freshly squeezed orange juice and perfect cappuccinos. Because a great sandwich deserves a great drink.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Our Greatest Hits</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">🧀</div>
+                <div class="gallery-item">🍅</div>
+                <div class="gallery-item">🥓</div>
+                <div class="gallery-item">🥚</div>
+                <div class="gallery-item">🌿</div>
+                <div class="gallery-item">🥗</div>
+                <div class="gallery-item">🍊</div>
+                <div class="gallery-item">☕</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="location">
+        <div class="container">
+            <h2 class="section-title">Find Us</h2>
+            <div class="location-content">
+                <div class="map-placeholder">📍</div>
+                <div class="location-info">
+                    <h3>Visit Our Little Corner of Paradise</h3>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Singel 321, 1012 WK Amsterdam</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>Mon-Sun: 8:30 AM - 6:00 PM</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🚶</span>
+                        <span>Between Negen Straatjes & Kalverstraat</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🚲</span>
+                        <span>Bike parking available</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">💡</span>
+                        <span>Takeaway only - No delivery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <h2 style="font-size: 36px; margin-bottom: 20px; color: #FFD23F;">BROODJE BERT</h2>
+            <p style="font-size: 18px; margin-bottom: 10px;">Making Amsterdam's best sandwiches, one smile at a time.</p>
+            <p style="font-size: 16px; color: #FFE5B4;">Singel 321, 1012 WK Amsterdam</p>
+            <div class="social-links">
+                <a href="#">📷</a>
+                <a href="#">🌐</a>
+                <a href="#">📧</a>
+            </div>
+            <p style="margin-top: 40px; font-size: 14px; color: #A1887F;">© 2026 Broodje Bert. All sandwiches reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .gallery-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Interactive gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.animation = 'pulse 0.5s ease-in-out';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
