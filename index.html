@@ -757,4 +757,194 @@
                 id: 1,
                 name: "Broodje Bert Special",
                 category: "signature",
-                price: "€7.
+                price: "€7.50",
+                description: "Our legendary sandwich with homemade lamb meatballs, fresh veggies, and our secret sauce on warm Turkish bread"
+            },
+            {
+                id: 2,
+                name: "Swiss Omelette",
+                category: "signature",
+                price: "€8.00",
+                description: "Massive fluffy omelette with Swiss cheese, tomatoes, herbs, and your choice of toppings on fresh bread"
+            },
+            {
+                id: 3,
+                name: "Mozzarella Tomato Pesto",
+                category: "sandwiches",
+                price: "€6.50",
+                description: "Fresh mozzarella, ripe tomatoes, homemade pesto, and crisp lettuce on artisan bread"
+            },
+            {
+                id: 4,
+                name: "Classic BLT",
+                category: "sandwiches",
+                price: "€7.00",
+                description: "Crispy bacon, fresh lettuce, juicy tomatoes, and mayo on toasted bread. Simple perfection."
+            },
+            {
+                id: 5,
+                name: "Chicken Avocado",
+                category: "sandwiches",
+                price: "€7.50",
+                description: "Grilled chicken, creamy avocado, lettuce, tomato, and herb mayo on fresh Turkish bread"
+            },
+            {
+                id: 6,
+                name: "Tuna Melt",
+                category: "sandwiches",
+                price: "€6.50",
+                description: "Premium tuna salad with melted cheese, tomatoes, and fresh herbs"
+            },
+            {
+                id: 7,
+                name: "Goat Cheese & Honey",
+                category: "sandwiches",
+                price: "€7.00",
+                description: "Creamy goat cheese, honey drizzle, walnuts, and fresh arugula on warm bread"
+            },
+            {
+                id: 8,
+                name: "Breakfast Croissant",
+                category: "breakfast",
+                price: "€5.50",
+                description: "Buttery croissant with scrambled eggs, cheese, and your choice of bacon or ham"
+            },
+            {
+                id: 9,
+                name: "Bagel Salmon",
+                category: "breakfast",
+                price: "€8.50",
+                description: "Fresh bagel with smoked salmon, cream cheese, capers, red onion, and dill"
+            },
+            {
+                id: 10,
+                name: "Freshly Squeezed OJ",
+                category: "drinks",
+                price: "€4.50",
+                description: "Squeezed to order from fresh oranges. Pure liquid sunshine in a cup."
+            },
+            {
+                id: 11,
+                name: "Cappuccino",
+                category: "drinks",
+                price: "€3.50",
+                description: "Perfect Italian-style cappuccino with rich espresso and silky steamed milk"
+            },
+            {
+                id: 12,
+                name: "Fresh Lemonade",
+                category: "drinks",
+                price: "€4.00",
+                description: "Homemade lemonade with fresh lemons, mint, and a touch of sweetness"
+            }
+        ];
+
+        let cart = [];
+
+        function renderMenu(items) {
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = items.map(item => `
+                <div class="menu-item" data-category="${item.category}">
+                    <svg class="menu-item-image" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad${item.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FFD23F;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#FF6B35;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="400" height="250" fill="url(#grad${item.id})"/>
+                        ${item.category === 'drinks' ? 
+                            `<rect x="150" y="60" width="100" height="140" rx="10" fill="#FFF8E1"/>
+                             <circle cx="200" cy="100" r="25" fill="#FFA500"/>` :
+                            `<ellipse cx="200" cy="100" rx="120" ry="40" fill="#D4A574"/>
+                             <rect x="80" y="100" width="240" height="60" fill="#FFF8E1"/>
+                             <ellipse cx="200" cy="160" rx="120" ry="40" fill="#D4A574"/>`
+                        }
+                        <text x="200" y="220" font-family="Arial" font-size="20" font-weight="bold" fill="white" text-anchor="middle">${item.name}</text>
+                    </svg>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-name">${item.name}</h3>
+                            <span class="menu-item-price">${item.price}</span>
+                        </div>
+                        <p class="menu-item-desc">${item.description}</p>
+                        <button class="add-to-order" onclick="addToCart(${item.id})">Add to Order 🛒</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterMenu(category) {
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const filtered = category === 'all' ? menuItems : menuItems.filter(item => item.category === category);
+            renderMenu(filtered);
+        }
+
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            cart.push(item);
+            updateCartCount();
+            
+            // Visual feedback
+            const btn = event.target;
+            btn.textContent = 'Added! ✓';
+            btn.style.background = '#27AE60';
+            setTimeout(() => {
+                btn.textContent = 'Add to Order 🛒';
+                btn.style.background = '#FF6B35';
+            }, 1000);
+        }
+
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        function showCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty! Add some delicious sandwiches first 🥪');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => {
+                const price = parseFloat(item.price.replace('€', ''));
+                return sum + price;
+            }, 0);
+
+            const cartItems = cart.map(item => `${item.name} - ${item.price}`).join('\n');
+            alert(`YOUR ORDER:\n\n${cartItems}\n\nTOTAL: €${total.toFixed(2)}\n\nVisit us at Singel 321 to pick up your order!\n\nNote: We're takeaway only - come enjoy your sandwich by the canal! 🌊`);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .menu-item, .photo-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initialize menu
+        renderMenu(menuItems
